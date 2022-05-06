@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# 最新取得
+git pull origin
+
+# タグ一覧の取得
+TAGS=$(git tag --list --sort='-v:refname' --format='%(creatordate:short)=%(refname:short)')
+
+# タグを選択させて削除
+printf "##############################################################################\n"
+printf "## 削除するタグを選択してください\n"
+printf "##############################################################################\n"
+select TAG in $TAGS
+do
+  # タグを選択
+  TAG=$(echo $TAG | awk -F "=" '{print $2}')
+
+  # 削除プロンプト
+  printf "##############################################################################\n"
+  git show $TAG --format='full'
+  printf "##############################################################################\n"
+  printf "以上のタグの削除してよろしいですか Y/n : "
+  read CONFIRM
+  if [ ${CONFIRM:-Y} = "Y" ]; then
+    git tag -d $TAG
+    git push origin :$TAG
+  else
+    echo "削除処理を中止しました"
+  fi
+
+  exit
+done
+

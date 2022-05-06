@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# 現在のブランチ
+CURRENT_BRANCH=$(git branch | grep '*' | awk '{print $2}')
+
+# push
+git push origin $CURRENT_BRANCH
+

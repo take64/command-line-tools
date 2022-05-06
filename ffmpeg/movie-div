@@ -21,9 +21,7 @@ read ANS
 case $ANS in
   [Yy]* )
     ffmpeg -i "$FILE_PATH" -c copy -f segment -flags +global_header -segment_format_options movflags=+faststart -reset_timestamps 1 -segment_time ${SECONDS} "${FILE_NAME}-%02d.mp4"
-    echo "Yes"
     ;;
   * )
-    echo "No"
     ;;
 esac

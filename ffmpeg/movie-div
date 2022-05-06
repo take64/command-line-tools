@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#set -x
+
+FILE_PATH=$1
+FILE_NAME=$(echo ${FILE_PATH} | sed 's/\.[^\.]*$//')
+SECONDS=$2
+
+((SEC=${SECONDS}%60))
+((MIN=(${SECONDS}%3600)/60))
+((HRS=${SECONDS}/3600))
+
+printf "##############################################################################\n"
+printf "## ファイル名「${FILE_NAME}」を\n"
+printf "## 「%d:%02d:%02d」ごとに分割します\n" ${HRS} ${MIN} ${SEC}
+printf "##############################################################################\n"
+
+echo -n "よろしいですか？ [y/N]: "
+read ANS
+
+case $ANS in
+  [Yy]* )
+    ffmpeg -i "$FILE_PATH" -c copy -f segment -flags +global_header -segment_format_options movflags=+faststart -reset_timestamps 1 -segment_time ${SECONDS} "${FILE_NAME}-%02d.mp4"
+    echo "Yes"
+    ;;
+  * )
+    echo "No"
+    ;;
+esac

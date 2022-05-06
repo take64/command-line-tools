@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# 最新取得
+git pull origin
+
+# HEADのブランチ
+HEAD_BRANCH_NAME=$(git branch --remotes --sort=-authordate | grep ver | grep -v HEAD | awk '{print $1}' | head -1)
+echo $HEAD_BRANCH_NAME
+
+
+# ブランチ文字列の入力
+printf "作成ブランチ名を入力してください : "
+read BRANCH_NAME
+
+# ブランチの作成
+git checkout -b $BRANCH_NAME $HEAD_BRANCH_NAME
+

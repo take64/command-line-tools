@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# 最新取得
+git fetch origin
+
+# 現在のブランチ
+NOW_BRANCH=$(git branch --contains | cut -d " " -f 2)
+echo 現在のブランチ: $NOW_BRANCH
+
+# 現在の親ブランチ
+PARENT_BRANCH=$(git show-branch | grep '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | awk -F'[]~^[]' '{print $2}')
+echo 現在の親ブランチ: $PARENT_BRANCH
+
+# ブランチ文字列の入力
+printf "親ブランチに設定したいブランチ名を入力してください : "
+read BRANCH_NAME
+
+# 親ブランチの変更
+git rebase --onto $BRANCH_NAME $PARENT_BRANCH $NOW_BRANCH
